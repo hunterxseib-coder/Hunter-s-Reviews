@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hunter's Reviews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bone: #F2EDE4;
+    --bone-dark: #E3DDD4;
+    --charcoal: #1C1C1A;
+    --charcoal-mid: #2E2E2B;
+    --charcoal-light: #4A4A46;
+    --ash: #8A8A84;
+    --rule: #C8C2B8;
+    --accent: #1C1C1A;
+    --serif-display: 'Playfair Display', Georgia, serif;
+    --serif-body: 'EB Garamond', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  html { background: var(--bone); color: var(--charcoal); }
+
+  body {
+    font-family: var(--serif-body);
+    font-size: 18px;
+    line-height: 1.7;
+    background: var(--bone);
+    min-height: 100vh;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    border-bottom: 1px solid var(--charcoal);
+    padding: 2rem 0 0;
+    margin-bottom: 0;
+  }
+
+  .masthead-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+  }
+
+  .site-kicker {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-bottom: 0.4rem;
+  }
+
+  .site-title {
+    font-family: var(--serif-display);
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--charcoal);
+    margin-bottom: 1.2rem;
+  }
+
+  .masthead-rule {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .masthead-rule .rule-line {
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .masthead-nav {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ash);
+    white-space: nowrap;
+  }
+
+  /* ── CONTROLS ── */
+  .controls-bar {
+    background: var(--bone-dark);
+    border-bottom: 1px solid var(--rule);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .controls-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .control-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ash);
+    white-space: nowrap;
+  }
+
+  .controls-bar input[type="text"],
+  .controls-bar select {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--charcoal-light);
+    padding: 0.25rem 0;
+    color: var(--charcoal);
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .controls-bar input[type="text"] {
+    width: 160px;
+  }
+
+  .controls-bar input[type="text"]::placeholder {
+    color: var(--ash);
+  }
+
+  .controls-bar select {
+    padding-right: 1rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234A4A46'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+    cursor: pointer;
+  }
+
+  .controls-bar select option {
+    background: var(--bone);
+  }
+
+  .divider {
+    width: 1px;
+    height: 16px;
+    background: var(--rule);
+    flex-shrink: 0;
+  }
+
+  .count-display {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ash);
+    margin-left: auto;
+  }
+
+  /* ── GRID ── */
+  .archive {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2.5rem 6rem;
+  }
+
+  .film-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--charcoal);
+    border-left: 1px solid var(--charcoal);
+  }
+
+  /* ── FILM CARD ── */
+  .film-card {
+    border-right: 1px solid var(--charcoal);
+    border-bottom: 1px solid var(--charcoal);
+    cursor: pointer;
+    transition: background 0.15s ease;
+    background: var(--bone);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .film-card:hover {
+    background: var(--bone-dark);
+  }
+
+  .poster-wrap {
+    width: 100%;
+    aspect-ratio: 2/3;
+    overflow: hidden;
+    background: var(--charcoal-mid);
+    position: relative;
+  }
+
+  .poster-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(20%) contrast(1.05);
+    transition: filter 0.2s ease;
+  }
+
+  .film-card:hover .poster-wrap img {
+    filter: grayscale(0%) contrast(1.05);
+  }
+
+  .poster-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--charcoal-mid);
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+  }
+
+  .poster-placeholder-title {
+    font-family: var(--serif-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--bone);
+    line-height: 1.2;
+    opacity: 0.7;
+  }
+
+  .card-meta {
+    padding: 0.85rem 1rem 1rem;
+    border-top: 1px solid var(--rule);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .card-title {
+    font-family: var(--serif-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--charcoal);
+  }
+
+  .card-info {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--ash);
+    margin-top: 0.1rem;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    grid-column: 1 / -1;
+    padding: 4rem 0;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ash);
+    text-transform: uppercase;
+  }
+
+  /* ── ESSAY OVERLAY ── */
+  .essay-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--bone);
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .essay-overlay.open { display: block; }
+
+  .essay-header {
+    border-bottom: 1px solid var(--charcoal);
+    padding: 1.5rem 0 0;
+    background: var(--bone);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .essay-header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+  }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ash);
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    margin-bottom: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover { color: var(--charcoal); }
+
+  .essay-film-title {
+    font-family: var(--serif-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+  }
+
+  .essay-film-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ash);
+    text-transform: uppercase;
+    padding-bottom: 1rem;
+  }
+
+  .essay-body {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 2.5rem 6rem;
+  }
+
+  .essay-text {
+    font-family: var(--serif-body);
+    font-size: 19px;
+    line-height: 1.8;
+    color: var(--charcoal);
+  }
+
+  .essay-text p {
+    margin-bottom: 1.5em;
+  }
+
+  .essay-text p:first-child::first-letter {
+    font-family: var(--serif-display);
+    font-size: 4.2em;
+    font-weight: 900;
+    float: left;
+    line-height: 0.8;
+    margin: 0.08em 0.06em 0 0;
+    color: var(--charcoal);
+  }
+
+  .essay-rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 2.5rem 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .masthead-inner, .controls-inner, .archive { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .film-grid { grid-template-columns: repeat(2, 1fr); }
+    .controls-inner { gap: 0.75rem; }
+    .essay-header-inner, .essay-body { padding-left: 1.25rem; padding-right: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="site-kicker">Film Criticism</p>
+    <h1 class="site-title">Hunter's Reviews</h1>
+    <div class="masthead-rule">
+      <div class="rule-line"></div>
+      <span class="masthead-nav">An archive of great films</span>
+      <div class="rule-line"></div>
+    </div>
+  </div>
+</header>
+
+<!-- CONTROLS -->
+<div class="controls-bar">
+  <div class="controls-inner">
+    <div class="control-group">
+      <span class="control-label">Search</span>
+      <input type="text" id="search-input" placeholder="Title, director, year…">
+    </div>
+    <div class="divider"></div>
+    <div class="control-group">
+      <span class="control-label">Genre</span>
+      <select id="genre-filter">
+        <option value="">All</option>
+        <option value="War">War</option>
+        <option value="Drama">Drama</option>
+        <option value="Horror">Horror</option>
+        <option value="Sci-Fi">Sci-Fi</option>
+        <option value="Crime">Crime</option>
+        <option value="Thriller">Thriller</option>
+      </select>
+    </div>
+    <div class="divider"></div>
+    <div class="control-group">
+      <span class="control-label">Sort</span>
+      <select id="sort-filter">
+        <option value="title">Title A–Z</option>
+        <option value="year-asc">Year ↑</option>
+        <option value="year-desc">Year ↓</option>
+      </select>
+    </div>
+    <span class="count-display" id="count-display">1 essay</span>
+  </div>
+</div>
+
+<!-- ARCHIVE GRID -->
+<main class="archive">
+  <div class="film-grid" id="film-grid"></div>
+</main>
+
+<!-- ESSAY OVERLAY -->
+<div class="essay-overlay" id="essay-overlay" role="dialog" aria-modal="true">
+  <div class="essay-header">
+    <div class="essay-header-inner">
+      <button class="back-link" id="back-btn" aria-label="Back to archive">← Back to archive</button>
+      <h2 class="essay-film-title" id="essay-title"></h2>
+      <p class="essay-film-meta" id="essay-meta"></p>
+    </div>
+  </div>
+  <div class="essay-body">
+    <div class="essay-text" id="essay-content"></div>
+  </div>
+</div>
+
+<script>
+const films = [
+  {
+    id: 1,
+    title: "Apocalypse Now",
+    year: 1979,
+    director: "Francis Ford Coppola",
+    genre: "War",
+    poster: null,
+    essay: `<p>There's scarcely a better way to start this descent into madness than with an inferno. As napalm envelopes the beautiful foliage of Vietnam, Jim Morrison's baritone voice informs us of something: "This is the end."</p>
+
+<p>It's almost laborious to write about Francis Ford Coppola's Apocalypse Now after four decades. The film's gotten the highest honors imaginable — it's a staple of the Sight &amp; Sound poll, it's on both Letterboxd and IMDb's top 250, and it's been reviewed at a four-out-of-four by Roger Ebert three times, including in his Great Movies essay series.</p>
+
+<p>But the Oscar for Best Picture? No, that went to Kramer vs. Kramer, a divorce drama and Meryl Streep vehicle. Of course, at the time, this wouldn't have been heresy. Divorce rates in America were skyrocketing, and this film provided a creative lens to cope with that.</p>
+
+<p>But what ultimately led Apocalypse Now to immortality is that its themes are evergreen: the inherent hypocrisy of warfare. Our antagonist is ousted not because of his cruelty, but simply because he did it all without orders.</p>
+
+<p>Apocalypse Now fulfilled Hollywood's long search to adapt Joseph Conrad's Heart of Darkness to the screen. Conrad's novel proposed, bravely for the time, that there is little or no difference between the brutality of colonialism and the brutality of primitivism — essentially, the European characters such as Marlow or Kurtz are even more evil than the natives who leave heads on pikes.</p>
+
+<p>Marlow, in Conrad's novel, is tasked with descending Congo waterways to remove Kurtz, an ivory trader who's been abusing the natives to a frankly biblical extent. Apocalypse Now has a Kurtz too, that being Col. Walter E. Kurtz, a renegade Green Beret who has built himself an empire in the Cambodian jungle. Our protagonist is named Willard and played by Martin Sheen, whose son would appear in fellow Vietnam film Platoon.</p>
+
+<p>Willard is a US Army captain introduced both figuratively and literally naked. Divorced and occupationally disgraced (it's heavily implied he has far from a perfect record), one last hint of destiny comes calling to him like it's just a gift from the screenplay itself. Army intel wants him to travel in a small patrol boat up to Cambodia and remove Kurtz by any means necessary.</p>
+
+<p>He's set up with a few comrades on the boat, including a young Laurence Fishburne who lied about his age at the audition. They reach a port where they ride with Col. Kilgore, played by Coppola's Godfather veteran Robert Duvall in what is clearly his most iconic performance, if the fame of "I love the smell of napalm in the morning" is anything to go by. Kilgore leads a fleet of Bell helicopters into a VC base and civilian town while blasting the music of proud fascist Richard Wagner, which I refuse to believe was a coincidence on Coppola's part. Many explosions later, he's cleared it out… to surf. In a piece of the film's subtle theme of ethnocentrism, Kilgore proudly exclaims "Charlie don't surf!" This is technically true of the location; surfboards left behind on location introduced the Philippines to surf culture.</p>
+
+<p>Once Willard and the crew depart from this, the film turns into a loose collection of shipboard vignettes. This continues through unforgettable scenes like a near-miss with a tiger or a cruel war crime against a Vietnamese supply boat. By the pitch-black battle of the Do-Lung Bridge, the film has lost any sense of reason. It's here where Coppola added the controversial French plantation scene to the Redux and Final Cut versions.</p>
+
+<p>Willard and his crew stop by the estate of wealthy French settlers in this journey backwards through Vietnam's history. They debate why the French would want to stay in Vietnam. It's a politically insightful scene, but ultimately too jarring and lofty for my taste.</p>
+
+<p>What I have no criticism of, though, is the film's third act. Once the few who remain in Willard's crew sail up to Kurtz's compound, it becomes a choose-your-own-adventure straight from hell. It takes several minutes with an eccentric new Dennis Hopper character, completely brainwashed by Kurtz, before Willard can meet the man himself. Once he does, Marlon Brando gets to shine as the ultimate antagonist in a way even Vito Corleone couldn't impeach.</p>
+
+<p>The man gets very few scenes, but when he does, he glimmers. In the Redux, he reads newspapers about the war to Willard in a scene I wish made it to the Final Cut. When I saw it during my first and maybe only time watching the Redux, it struck me as a perfect illustration of just how grand the film is; Sheen's character begins in a claustrophobic hotel room, explores the vast wilderness of Indochina, and ends his journey completely captive once again.</p>
+
+<p>It would be a great metaphor for the Vietnam War, but Coppola decided to make it something larger than that. It's a film about good and evil, Western civilization and Orientalism, and how far or little man has come. If the apes gathering at the 2001 Monolith could see young men in the 1970s drop fire on their brothers, would they have thrown the bone?</p>`
+  }
+];
+
+let filtered = [...films];
+
+function renderGrid() {
+  const grid = document.getElementById('film-grid');
+  const count = document.getElementById('count-display');
+  grid.innerHTML = '';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty-state">No essays found</div>';
+    count.textContent = '0 essays';
+    return;
+  }
+
+  count.textContent = filtered.length === 1 ? '1 essay' : filtered.length + ' essays';
+
+  filtered.forEach(film => {
+    const card = document.createElement('div');
+    card.className = 'film-card';
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', film.title + ', ' + film.year);
+
+    const poster = film.poster
+      ? `<img src="${film.poster}" alt="${film.title} poster" loading="lazy">`
+      : `<div class="poster-placeholder"><span class="poster-placeholder-title">${film.title}</span></div>`;
+
+    card.innerHTML = `
+      <div class="poster-wrap">${poster}</div>
+      <div class="card-meta">
+        <div class="card-title">${film.title}</div>
+        <div class="card-info">${film.year} &nbsp;·&nbsp; ${film.director}</div>
+      </div>`;
+
+    card.addEventListener('click', () => openEssay(film));
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openEssay(film); });
+    grid.appendChild(card);
+  });
+}
+
+function applyFilters() {
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  const genre = document.getElementById('genre-filter').value;
+  const sort = document.getElementById('sort-filter').value;
+
+  filtered = films.filter(f => {
+    const matchQ = !q || f.title.toLowerCase().includes(q) || f.director.toLowerCase().includes(q) || String(f.year).includes(q);
+    const matchGenre = !genre || f.genre === genre;
+    return matchQ && matchGenre;
+  });
+
+  filtered.sort((a, b) => {
+    if (sort === 'title') return a.title.localeCompare(b.title);
+    if (sort === 'year-asc') return a.year - b.year;
+    if (sort === 'year-desc') return b.year - a.year;
+    return 0;
+  });
+
+  renderGrid();
+}
+
+function openEssay(film) {
+  document.getElementById('essay-title').textContent = film.title;
+  document.getElementById('essay-meta').textContent = `${film.year}  ·  Dir. ${film.director}  ·  ${film.genre}`;
+  document.getElementById('essay-content').innerHTML = film.essay;
+  const overlay = document.getElementById('essay-overlay');
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEssay() {
+  document.getElementById('essay-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('back-btn').addEventListener('click', closeEssay);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEssay(); });
+document.getElementById('search-input').addEventListener('input', applyFilters);
+document.getElementById('genre-filter').addEventListener('change', applyFilters);
+document.getElementById('sort-filter').addEventListener('change', applyFilters);
+
+renderGrid();
+</script>
+</body>
+</html>
